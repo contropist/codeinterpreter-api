@@ -1,29 +1,81 @@
-[tool.poetry]
+[project]
 name = "codeinterpreterapi"
-version = "0.0.9"
+version = "0.1.20"
 description = "CodeInterpreterAPI is an (unofficial) open source python interface for the ChatGPT CodeInterpreter."
-authors = ["Shroominic <contact@shroominic.com>"]
+authors = [{ name = "Shroominic", email = "contact@shroominic.com" }]
+dependencies = [
+    "langchain>=0.1, <0.2",
+    "langchain_openai",
+    "codeboxapi==0.1.19",
+    "pyzmq==25.1.2",
+]
+license = { file = "LICENSE" }
 readme = "README.md"
-license = "MIT"
+requires-python = ">= 3.9.7, <3.13"
+keywords = [
+    "codeinterpreter",
+    "chatgpt",
+    "codeinterpreterapi",
+    "api",
+    "langchain",
+    "codeboxapi",
+]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
 
-[tool.poetry.dependencies]
-python = ">=3.9,<3.9.7 || >3.9.7,<4.0"
-python-dotenv = "^1.0.0"
-openai = "^0.27.8"
-langchain = "^0.0.242"
-codeboxapi = "^0.0.14"
-
-[tool.poetry.extras]
-all = ["jupyter-kernel-gateway", "streamlit", "Pillow"]
-localbox = ["jupyter-kernel-gateway"]
-frontend = ["streamlit"]
-image_support = ["Pillow"]
-
-[tool.poetry.dev-dependencies]
-pytest = "^7.4.0"
-mypy = "^1.4.1"
-black = "^23.7.0"
+[project.urls]
+Code = "https://github.com/shroominic/codeinterpreter-api"
+Docs = "https://shroominic.github.io/codeinterpreter-api"
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.rye]
+managed = true
+dev-dependencies = [
+    "ruff",
+    "mypy",
+    "isort",
+    "pytest",
+    "ipython",
+    "pre-commit",
+    "codeinterpreterapi[all]",
+    "mkdocs-material>=9.4",
+]
+
+[project.optional-dependencies]
+localbox = ["codeboxapi[local_support]"]
+frontend = ["streamlit"]
+image_support = ["codeboxapi[image_support]"]
+all = ["codeboxapi[all]", "codeinterpreterapi[frontend]"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.pytest.ini_options]
+addopts = "-p no:warnings"
+
+[tool.isort]
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+line_length = 120
+
+[tool.flake8]
+max-line-length = 120
+
+[tool.mypy]
+ignore_missing_imports = true
+disallow_untyped_defs = true
+disallow_untyped_calls = true
+disallow_incomplete_defs = true
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
